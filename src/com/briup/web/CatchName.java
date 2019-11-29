@@ -30,21 +30,26 @@ public class CatchName {
 		conn = (HttpURLConnection) url.openConnection();
 		conn.setRequestMethod("GET");
 		conn.setConnectTimeout(5 * 1000);
-		is = conn.getInputStream();
-		reader = new BufferedReader(new InputStreamReader(is, "UTF-8"));
-		String str = null;
-		StringBuilder buf = new StringBuilder();
-		while ((str = reader.readLine()) != null) {
-			buf.append(str);
-		}
-		
-		json = new JSONObject(buf.toString());
-		jsonArray = json.getJSONArray("skins");
-		JSONObject obj = (JSONObject) jsonArray.get(0);
-		String name = (String) obj.get("heroName");
-		return name;
-	}
 
+		try {
+			is = conn.getInputStream();
+
+			reader = new BufferedReader(new InputStreamReader(is, "UTF-8"));
+			String str = null;
+			StringBuilder buf = new StringBuilder();
+			while ((str = reader.readLine()) != null) {
+				buf.append(str);
+			}
+
+			json = new JSONObject(buf.toString());
+			jsonArray = json.getJSONArray("skins");
+			JSONObject obj = (JSONObject) jsonArray.get(0);
+			String name = (String) obj.get("heroName");
+			return name;
+		} catch (Exception e) {
+			return null;
+		}
+	}
 
 	public static String skinsName(int no) throws Exception {
 		JSONObject obj = (JSONObject) jsonArray.get(no);

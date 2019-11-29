@@ -18,7 +18,7 @@ public class SkinImgCatch {
 		String path;
 		CatchService service = new CatchService();
 
-		for (int k = 1; k < 555; k++) {
+		for (int k = 1; k <= 555; k++) {
 			if (flag == false) {
 				break;
 			}
