@@ -77,10 +77,10 @@ public class CatchEnter extends JFrame {
 		boot.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseReleased(MouseEvent e) {
-				String bath = jtf.getText();
+				String path = jtf.getText();
 				SkinImgCatch catcher = new SkinImgCatch();
 				try {
-					catcher.catchSkin(bath);
+					catcher.catchSkin(path);
 				} catch (Exception e1) {
 					e1.printStackTrace();
 				}

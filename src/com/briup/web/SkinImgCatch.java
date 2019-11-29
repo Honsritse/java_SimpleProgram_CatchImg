@@ -1,9 +1,11 @@
 package com.briup.web;
 
+import java.util.List;
+
 /**
  * 
  * @ClassName: SkinImgCatch
- * @Description: 针对LOL官网所有英雄的原画进行获取
+ * @Description: 针对LOL日服官网所有英雄的原画进行获取
  * @author y2312
  * @date Nov 26, 2019
  *
@@ -11,28 +13,21 @@ package com.briup.web;
 
 public class SkinImgCatch {
 
-	public void catchSkin(String basePath, boolean flag) throws Exception {
-		String str1;
-		String str2;
-		String imgUrl;
-		String path;
+	public void catchSkin(String basePath) throws Exception {
+		List<String> heroNames;
+		String imgUrl = null;
+		String path = null;
 		CatchService service = new CatchService();
 
-		for (int k = 1; k <= 555; k++) {
-			if (flag == false) {
-				break;
-			}
-			String name = CatchName.init(k);
-			path = basePath + "/" + name;
-			System.out.println("Debug:K=" + k);
-			for (int i = 0; i < 50; i++) {
+		heroNames = CatchName.getNames();
+		for (String heroName : heroNames) {
+			for (int i = 0; i < 20; i++) {
 				try {
-					str1 = String.format("%03d", i);
-					str2 = String.valueOf(k);
-					imgUrl = "https://game.gtimg.cn/images/lol/act/img/skin/big" + str2 + str1 + ".jpg";
+					imgUrl = "https://ddragon.leagueoflegends.com/cdn/img/champion/splash/" + heroName + "_" + i
+							+ ".jpg";
 					System.out.print(imgUrl + "\t");
-
-					String skinsName = CatchName.skinsName(i);
+					path = basePath + "/" + heroName;
+					String skinsName = CatchName.getSkinsName(heroName,i);
 					service.getImg(imgUrl, path, skinsName);
 
 					System.out.print(i + "\t");
@@ -42,10 +37,6 @@ public class SkinImgCatch {
 				}
 			}
 		}
-	}
-
-	public void catchSkin(String basePath) throws Exception {
-		catchSkin(basePath, true);
 	}
 
 }
