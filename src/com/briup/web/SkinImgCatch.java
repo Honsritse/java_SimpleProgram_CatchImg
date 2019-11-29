@@ -11,7 +11,7 @@ package com.briup.web;
 
 public class SkinImgCatch {
 
-	public void catchSkin(String basePath, boolean flag) {
+	public void catchSkin(String basePath, boolean flag) throws Exception {
 		String str1;
 		String str2;
 		String imgUrl;
@@ -22,6 +22,8 @@ public class SkinImgCatch {
 			if (flag == false) {
 				break;
 			}
+			String name = CatchName.init(k);
+			path = basePath + "/" + name;
 			System.out.println("Debug:K=" + k);
 			for (int i = 0; i < 50; i++) {
 				try {
@@ -30,8 +32,8 @@ public class SkinImgCatch {
 					imgUrl = "https://game.gtimg.cn/images/lol/act/img/skin/big" + str2 + str1 + ".jpg";
 					System.out.print(imgUrl + "\t");
 
-					path = basePath + "/" + k;
-					service.getImg(imgUrl, path);
+					String skinsName = CatchName.skinsName(i);
+					service.getImg(imgUrl, path, skinsName);
 
 					System.out.print(i + "\t");
 				} catch (Exception e) {
@@ -42,7 +44,7 @@ public class SkinImgCatch {
 		}
 	}
 
-	public void catchSkin(String basePath) {
+	public void catchSkin(String basePath) throws Exception {
 		catchSkin(basePath, true);
 	}
 

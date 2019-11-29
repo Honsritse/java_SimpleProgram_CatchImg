@@ -79,7 +79,12 @@ public class CatchEnter extends JFrame {
 			public void mouseReleased(MouseEvent e) {
 				String bath = jtf.getText();
 				SkinImgCatch catcher = new SkinImgCatch();
-				catcher.catchSkin(bath);
+				try {
+					catcher.catchSkin(bath);
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 
 		});

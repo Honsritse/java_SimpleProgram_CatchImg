@@ -7,21 +7,19 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.Date;
 
 /**
  * 
-    * @ClassName: CatchService
-    * @Description: 主要功能类，完成对应网站内容的获取和本地存储
-    * @author y2312
-    * @date Nov 26, 2019
-    *
+ * @ClassName: CatchService
+ * @Description: 主要功能类，完成对应网站内容的获取和本地存储
+ * @author y2312
+ * @date Nov 26, 2019
+ *
  */
-
 
 public class CatchService {
 
-	public void getImg(String imgUrl, String path) throws Exception {
+	public void getImg(String imgUrl, String path, String skinName) throws Exception {
 
 		URL url = new URL(imgUrl);
 		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -31,7 +29,7 @@ public class CatchService {
 		byte[] data = readInputStream(is);
 
 		File imageFile;
-		imageFile = new File(path, new Date().getTime() + ".jpg");
+		imageFile = new File(path, skinName + ".jpg");
 		if (!imageFile.getParentFile().exists()) {
 			try {
 				imageFile.getParentFile().mkdirs();
@@ -45,6 +43,7 @@ public class CatchService {
 		fos.write(data);
 		fos.flush();
 		fos.close();
+		conn.disconnect();
 	}
 
 	public static byte[] readInputStream(InputStream inStream) throws Exception {
