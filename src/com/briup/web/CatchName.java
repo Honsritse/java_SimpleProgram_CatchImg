@@ -7,56 +7,54 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
+import com.alibaba.fastjson.JSON;
+import com.briup.bean.ChampionsInfo;
+import com.briup.bean.HeroAndSkins;
+import com.briup.bean.Skin;
 
 /**
  * 
  * @ClassName: CatchName
- * @Description: 工具类，获取英雄名
+ * @Description: 工具类，获取英雄名、皮肤名
  * @author y2312
  * @date Nov 29, 2019
  *
  */
 public class CatchName {
-	private static String jsonPath;
 	private static BufferedReader reader;
 	private static URL url;
 
-	@SuppressWarnings("rawtypes")
 	public static List<String> getNames() throws Exception {
-		jsonPath = "https://ddragon.leagueoflegends.com/cdn/9.23.1/data/ja_JP/champion.json";
+		String jsonPath = "https://ddragon.leagueoflegends.com/cdn/9.23.1/data/ja_JP/champion.json";
 
-		String json = getJson();
+		ChampionsInfo info = JSON.parseObject(getJson(jsonPath),ChampionsInfo.class);
 
-		JSONObject champion = new JSONObject(json);
-		JSONObject heros = (JSONObject) champion.get("data");
-		Set keySet = heros.keySet();
-		List<String> heroNames = new ArrayList<>();
-		for (Object obj : keySet) {
-			heroNames.add(obj.toString());
-		}
-		return heroNames;
+		Map<String,HeroAndSkins> data = info.getData();
+		
+		Set<String> heroNames = data.keySet();
+		
+		List<String> list = new ArrayList<String>(heroNames);
+		return list;
 	}
-
+	
 	public static String getSkinsName(String heroName, int i) throws Exception {
 
-		jsonPath = "https://ddragon.leagueoflegends.com/cdn/9.23.1/data/ja_JP/champion/" + heroName + ".json";
+		String jsonPath = "https://ddragon.leagueoflegends.com/cdn/9.23.1/data/ja_JP/champion/" + heroName + ".json";
 
-		String json = getJson();
-
-		JSONObject jsonObj = new JSONObject(json);
-		JSONObject data = (JSONObject) jsonObj.get("data");
-		JSONObject hero = (JSONObject) data.get(heroName);
-		JSONArray skins = (JSONArray) hero.get("skins");
-		JSONObject skin = (JSONObject) skins.get(i);
-		String skinName = skin.getString("name");
-		return skinName;
+		ChampionsInfo heroInfo = JSON.parseObject(getJson(jsonPath),ChampionsInfo.class);
+		Map<String,HeroAndSkins> data = heroInfo.getData();
+		HeroAndSkins hero =  data.get(heroName);
+		List<Skin> skins = hero.getSkins();
+		Skin skin = skins.get(i);
+		
+		return skin.getName();
 	}
 
-	public static String getJson() throws Exception {
+	
+	public static String getJson(String jsonPath) throws Exception {
 		url = new URL(jsonPath);
 		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 		conn.setRequestMethod("GET");
